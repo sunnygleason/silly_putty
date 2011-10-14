@@ -6,13 +6,10 @@ module SillyPutty
       Net::HTTP.start(@host, @port) do |http|
         response = http.send_request(method, uri, body, headers)
 
-        # TODO: is there a more idiomatic way?
-        resp_headers = {}
-        response.each_capitalized do |k,v|
-          resp_headers[k] = v
-        end
-        
-        Response.new(response.code.to_i, response.body, resp_headers)
+        the_headers = {}
+        response.each_capitalized { |k,v| the_headers[k] = v }
+
+        Response.new(response.code.to_i, response.body, the_headers)
       end
     end
   end
