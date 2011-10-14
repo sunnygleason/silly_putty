@@ -2,7 +2,7 @@ require 'net/http'
 
 module SillyPutty
   class NetHttpClient < Base
-    def do_request(method, uri, body, headers)
+    def request_impl(method, uri, body, headers)
       Net::HTTP.start(@host, @port) do |http|
         response = http.send_request(method, uri, body, headers)
 

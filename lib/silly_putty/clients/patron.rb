@@ -2,7 +2,7 @@ require 'patron'
 
 module SillyPutty
   class PatronClient < Base
-    def do_request(method, uri, body, headers)
+    def request_impl(method, uri, body, headers)
       options = {}
       options[:data] = body unless body.nil?
       headers = headers ? headers : {}
