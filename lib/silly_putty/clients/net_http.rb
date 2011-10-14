@@ -11,4 +11,7 @@ module SillyPutty
       end
     end
   end
+
+  class DefaultClient < SillyPutty::NetHttpClient
+  end
 end

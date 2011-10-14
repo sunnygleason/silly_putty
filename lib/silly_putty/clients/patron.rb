@@ -13,4 +13,7 @@ module SillyPutty
       Response.new(response.status, response.body, response.headers)
     end
   end
+
+  class DefaultClient < SillyPutty::PatronClient
+  end
 end

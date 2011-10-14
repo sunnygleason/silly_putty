@@ -9,4 +9,7 @@ module SillyPutty
       Response.new(response.status, response.body, response.headers)
     end
   end
+
+  class DefaultClient < SillyPutty::KirkClient
+  end
 end
