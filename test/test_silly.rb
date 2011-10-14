@@ -14,6 +14,6 @@ clients = [
 ]
 
 clients.each do |c|
-  resp = c.do_request(:GET, "/bench", nil, nil)
+  resp = c.request(:GET, "/bench", nil, nil)
   pp resp
 end

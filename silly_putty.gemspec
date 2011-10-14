@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Sunny Gleason"]
   s.email       = ["sunny.gleason@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = "makes switching between http clients easy as pie"
+  s.description = "makes switching between http clients easy as pie"
 
   s.rubyforge_project = "silly_putty"
 
@@ -18,3 +18,4 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 end
+
