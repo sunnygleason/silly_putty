@@ -7,7 +7,10 @@ module SillyPutty
       Net::HTTP.start(@host, @port) do |http|
         response = http.send_request(method, uri, body, headers)
 
-        Response.new(response.code.to_i, response.body, Hash[response.each_capitalized.to_a])
+        the_headers = {}
+        response.each_capitalized {|k,v| the_headers[k] = v}
+
+        Response.new(response.code.to_i, response.body, the_headers)
       end
     end
   end
