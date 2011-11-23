@@ -11,9 +11,16 @@ module SillyPutty
     end
 
     def request(method, uri, body, headers)
-      @request_handler.call({:method => method, :base_url => @base_url, :path => uri, :body => body, :headers => headers}) if @request_handler
+      if ((method == :GET || method == :DELETE || method == :HEAD) && !body.nil?)
+        raise "#{method} must not contain a body!"
+      end
 
-      response = perform_request(method, uri, body, headers)
+      original = {:method => method, :base_url => @base_url, :path => uri, :body => body, :headers => headers}
+      fixedup  = fixup_request(original)
+
+      @request_handler.call(fixedup) if @request_handler
+
+      response = perform_request(fixedup[:method], fixedup[:path], fixedup[:body], fixedup[:headers])
       
       @response_handler.call({:status => response.status, :body => response.body, :headers => response.headers}) if @response_handler
 
@@ -21,7 +28,11 @@ module SillyPutty
     end
     
     private
-    
+
+    def fixup_request(original)
+      original
+    end
+
     def perform_request(method, uri, body, headers)
       raise 'not implemented!'
     end

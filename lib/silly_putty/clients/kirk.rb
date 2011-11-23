@@ -3,6 +3,17 @@ require 'kirk/client'
 module SillyPutty
   class KirkClient < Base
     private
+    def fixup_request(original)
+      headers = original[:headers]
+      headers = headers.merge({"Accept" => "*/*"})
+      
+      if !original[:body].nil? && headers["Content-Type"].nil?
+        headers = headers.merge({"Content-Type" => "application/x-www-form-urlencoded"})
+      end
+
+      original.merge({:headers => headers})
+    end
+
     def perform_request(method, uri, body, headers)
       response = Kirk::Client.request(method, @base_url + uri, nil, body, headers)
       
@@ -10,6 +21,8 @@ module SillyPutty
     end
   end
 
-  class DefaultClient < SillyPutty::KirkClient
+  if !defined?(DefaultClient)
+    class DefaultClient < SillyPutty::KirkClient
+    end
   end
 end

@@ -3,9 +3,14 @@ require 'net/http'
 module SillyPutty
   class NetHttpClient < Base
     private
+
+    def fixup_request(original)
+      original.merge({:method => original[:method].to_s})
+    end
+
     def perform_request(method, uri, body, headers)
       Net::HTTP.start(@host, @port) do |http|
-        response = http.send_request(method.to_s, uri, body, headers)
+        response = http.send_request(method, uri, body, headers)
 
         the_headers = {}
         response.each_capitalized {|k,v| the_headers[k] = v}
@@ -15,6 +20,8 @@ module SillyPutty
     end
   end
 
-  class DefaultClient < SillyPutty::NetHttpClient
+  if !defined?(DefaultClient)
+    class DefaultClient < SillyPutty::NetHttpClient
+    end
   end
 end

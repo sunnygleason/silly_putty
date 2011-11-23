@@ -3,6 +3,17 @@ require 'patron'
 module SillyPutty
   class PatronClient < Base
     private
+
+    def fixup_request(original)
+      headers = original[:headers]
+
+      if !original[:body].nil? && headers["Content-Type"].nil?
+        headers = headers.merge({"Content-Type" => "application/x-www-form-urlencoded"})
+      end
+
+      original.merge({:headers => headers})
+    end
+
     def perform_request(method, uri, body, headers)
       options = {}
       options[:data] = body unless body.nil?
@@ -14,6 +25,8 @@ module SillyPutty
     end
   end
 
-  class DefaultClient < SillyPutty::PatronClient
+  if !defined?(DefaultClient)
+    class DefaultClient < SillyPutty::PatronClient
+    end
   end
 end
