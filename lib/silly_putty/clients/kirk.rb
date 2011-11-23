@@ -7,7 +7,7 @@ module SillyPutty
       headers = original[:headers]
       headers = headers.merge({"Accept" => "*/*"})
       
-      if !original[:body].nil? && headers["Content-Type"].nil?
+      if original[:body] && headers["Content-Type"].nil?
         headers = headers.merge({"Content-Type" => "application/x-www-form-urlencoded"})
       end
 
@@ -21,7 +21,7 @@ module SillyPutty
     end
   end
 
-  if !defined?(DefaultClient)
+  unless defined?(DefaultClient)
     class DefaultClient < SillyPutty::KirkClient
     end
   end

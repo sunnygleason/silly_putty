@@ -11,8 +11,8 @@ module SillyPutty
     end
 
     def request(method, uri, body, headers)
-      if ((method == :GET || method == :DELETE || method == :HEAD) && !body.nil?)
-        raise "#{method} must not contain a body!"
+      if (method == :GET || method == :DELETE || method == :HEAD) && body
+        raise ArgumentError, "#{method} must not contain a body!"
       end
 
       original = {:method => method, :base_url => @base_url, :path => uri, :body => body, :headers => headers}

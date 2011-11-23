@@ -20,7 +20,7 @@ module SillyPutty
     end
   end
 
-  if !defined?(DefaultClient)
+  unless defined?(DefaultClient)
     class DefaultClient < SillyPutty::NetHttpClient
     end
   end

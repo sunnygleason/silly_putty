@@ -4,6 +4,25 @@ require 'rubygems'
 require 'webrick'
 require 'json'
 
+# yes, this seemed clean at the time
+class String
+  def to_class
+    chain = self.split "::"
+    i=0
+    res = chain.inject(Module) do |ans,obj|
+      break if ans.nil?
+      i+=1
+      klass = ans.const_get(obj)
+      # Make sure the current obj is a valid class 
+      # Or it's a module but not the last element, 
+      # as the last element should be a class
+      klass.is_a?(Class) || (klass.is_a?(Module) and i != chain.length) ? klass : nil
+    end
+  rescue NameError
+    nil
+  end
+end
+
 class EchoServlet < WEBrick::HTTPServlet::AbstractServlet
   def do_HEAD(request, response)
     handle(:HEAD, request, response)
@@ -51,7 +70,7 @@ end
 shared_examples "silly_putty" do
   before(:each) do
     @port = 5000 + rand(1000)
-    @client = eval(client).new("localhost", @port)
+    @client = client.to_class.new("localhost", @port)
     @server = WEBrick::HTTPServer.new(:Port=>@port, :ServerName=>"localhost", :Logger => WEBrick::Log.new("/dev/null"), :AccessLog => [nil, nil])
     @server.mount("/", EchoServlet)
     Thread.new(@server) {|server| server.start} 
